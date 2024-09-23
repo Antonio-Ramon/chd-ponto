@@ -38,7 +38,7 @@
     @apply border-border;
   }
   body {
-    @apply flex items-center justify-center min-h-screen bg-background text-foreground;
+    @apply flex items-start justify-center min-h-screen bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }

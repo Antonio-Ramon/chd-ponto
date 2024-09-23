@@ -22,12 +22,12 @@ import {
 } from "@/components/ui/table";
 
 import axios from "axios";
-import { Button } from "./components/ui/button";
 
 export default function App() {
   const [funcionarioId, setFuncionarioId] = useState("");
   const [funcionarioName, setFuncionarioName] = useState("");
   const [dados, setDados] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const registerEmployee = async (e) => {
     e.preventDefault();
@@ -83,6 +83,7 @@ export default function App() {
   };
 
   const getAllFuncionarios = async () => {
+    setLoading(true);
     try {
       const response = await axios.get("http://localhost:8080/funcionarios");
 
@@ -93,6 +94,8 @@ export default function App() {
       }
     } catch (error) {
       console.error("Erro na requisição:", error);
+    } finally {
+      setLoading(false);
     }
   };
   const getAllPontoRegistros = async () => {
@@ -120,11 +123,11 @@ export default function App() {
       <Tabs
         defaultValue="point-record"
         className="w-max"
-        onValueChange={(value) => {
+        onValueChange={async (value) => {
           if (value === "funcionarios") {
-            getAllFuncionarios();
+            await getAllFuncionarios();
           } else if (value === "registro_ponto") {
-            getAllPontoRegistros();
+            await getAllPontoRegistros();
           }
         }}
       >
@@ -200,24 +203,24 @@ export default function App() {
 
         {/* TABELA FUNCIONÁRIOS */}
         <TabsContent value="funcionarios">
-          <Card className="w-full mx-auto">
-            <CardHeader>
-              <CardTitle>Funcionários</CardTitle>
-              <CardDescription>
-                Aqui ficam todos os funcionários cadastrados.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[100px]">ID</TableHead>
-                    <TableHead>Funcionário</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {Array.isArray(dados) &&
-                    dados.map((funcionario, index) => (
+          {!loading && Array.isArray(dados) && dados.length > 0 ? (
+            <Card className="w-full mx-auto">
+              <CardHeader>
+                <CardTitle>Funcionários</CardTitle>
+                <CardDescription>
+                  Aqui ficam todos os funcionários cadastrados.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[100px]">ID</TableHead>
+                      <TableHead>Funcionário</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {dados.map((funcionario, index) => (
                       <TableRow key={index}>
                         <TableCell className="font-medium">
                           {funcionario.funcionario_id}
@@ -225,10 +228,13 @@ export default function App() {
                         <TableCell>{funcionario.name}</TableCell>
                       </TableRow>
                     ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          ) : (
+            ""
+          )}
         </TabsContent>
 
         {/* TABELA REGISTROS */}

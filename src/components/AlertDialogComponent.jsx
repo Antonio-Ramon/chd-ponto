@@ -66,24 +66,6 @@ export default function AlertDialogComponent({
       ) : (
         ""
       )}
-      {/* <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{dados.message}</AlertDialogTitle>
-          
-          <AlertDialogDescription>
-            { isRegister 
-              ? "Por favor anote o seu ID de funcionário pois será necessário para bater o ponto" 
-              : "Ponto registrado" 
-            }
-            <br/>
-            { isRegister ? <span>Seu ID: <b>{dados.employeeId}</b></span> : <span>Data: {dados.dateTime}</span> }
-            
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogAction onClick={cleanStates}>Confirmar</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent> */}
     </AlertDialog>
   );
 }
