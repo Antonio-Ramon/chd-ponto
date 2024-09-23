@@ -67,9 +67,18 @@ export default function App() {
         data
       );
 
-      setDados(response.data);
+      if (response.data) {
+        setDados(response.data);
+      } else {
+        console.log("Erro na requisição. Response: " + response.data);
+      }
     } catch (error) {
-      console.error("Erro na requisição:", error);
+      const message = error.response.data.message;
+      if (message == "Funcionário não encontrado") {
+        setDados(message);
+      } else {
+        console.error("Erro na requisição:", error);
+      }
     }
   };
 
@@ -98,6 +107,11 @@ export default function App() {
     } catch (error) {
       console.error("Erro na requisição:", error);
     }
+  };
+
+  const cleanStates = () => {
+    setFuncionarioId("");
+    setFuncionarioName("");
   };
 
   return (
@@ -145,7 +159,11 @@ export default function App() {
                 </div>
               </CardContent>
               <CardFooter>
-                <AlertDialogComponent dados={dados} isRegister={false} />
+                <AlertDialogComponent
+                  dados={dados}
+                  isRegister={false}
+                  cleanStates={cleanStates}
+                />
               </CardFooter>
             </form>
           </Card>
@@ -174,7 +192,7 @@ export default function App() {
                 </div>
               </CardContent>
               <CardFooter>
-                <AlertDialogComponent dados={dados} />
+                <AlertDialogComponent dados={dados} cleanStates={cleanStates} />
               </CardFooter>
             </form>
           </Card>
